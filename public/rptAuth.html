@@ -1,0 +1,116 @@
+ 
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generate Report</title>
+    <script src="public/twcss.js"></script>
+    <style>
+        h2 {
+            margin: 15% 0 5% 0 !important;
+        }
+        body {
+            padding: 10px;
+            font-size: 200%;
+            text-align: center;
+            background-color: #f7fafc; /* Tailwind's 'bg-gray-100' equivalent */
+    color: #1a202c; /* Tailwind's 'text-gray-900' equivalent */
+    font-family: sans-serif; /* Tailwind's 'font-sans' equivalent */
+        }
+
+        .custom-table {
+            min-width: 100%;
+            background-color: white;
+            border: 1px solid #E5E7EB;
+            
+            border-collapse: separate;
+            
+            border-spacing: 5000px 0;
+            
+        }
+
+        .custom-table thead {
+            background-color: #E5E7EB;
+            
+            color: #4B5563;
+            
+        }
+
+        .custom-table th,
+        .custom-table td {
+            padding: 0.5rem 1rem;
+            
+            text-align: left;
+            
+        }
+
+        .custom-table tbody tr {
+            border-top: 1px solid #E5E7EB;
+            
+        }
+
+        table th,
+        td {
+            padding: 5px 30px;
+        }
+
+
+        @keyframes moveHue {
+            100% {
+                background-position: -100% 0;
+            }
+
+            0% {
+                background-position: 100% 0;
+            }
+        }
+
+        .animate-hue {
+            background: linear-gradient(90deg, rgba(173, 216, 230, 0.5), rgba(135, 206, 250, 0.5));
+            background-size: 200% 100%;
+            animation: moveHue 3s linear infinite;
+        }
+
+        a {
+            color: aqua !important;
+        }
+    </style>
+</head>
+<body>
+    <h2 class="text-4xl font-semibold text-gray-700">View Usage Report</h2>
+    <form id="urlForm">
+        <input style='width:60%;' class="border border-white rounded-lg p-2 w-full bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="text" id="pw" placeholder="Enter password" required>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Get Report</button>
+    </form>
+
+    <div id="result"></div>
+
+
+    <script>
+        document.getElementById('urlForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const pw = document.getElementById('pw').value;
+
+            const response = await fetch('/authpw', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ target_url: pw })
+            });
+
+            const data = await response.text();
+            
+
+            const resultDiv = document.getElementById('result');
+
+            if (data.includes('<!DOCTYPE html>')) {
+                document.write(data);
+
+            } else {
+                resultDiv.innerHTML = 'Invalid password';
+            }
+        });
+    </script>
+</body>
+</html>

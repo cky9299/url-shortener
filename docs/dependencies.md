@@ -1,0 +1,12 @@
+# dependencies
+//package.json
+  "dependencies": {
+    "axios": "^1.7.7",
+    "body-parser": "^1.20.3",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "jest": "^29.7.0",
+    "mysql2": "^3.11.3",
+    "selenium-webdriver": "^4.25.0",
+    "valid-url": "^1.0.9"
+  }

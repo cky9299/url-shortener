@@ -1,0 +1,141 @@
+ 
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <script src="public/twcss.js"></script>
+    <style>
+        body {
+            padding: 10px;
+            font-size: 200%;
+            text-align: center;
+        }
+
+        .custom-table {
+            min-width: 100%;
+            background-color: white;
+            border: 1px solid #E5E7EB;
+            
+            border-collapse: separate;
+            
+            border-spacing: 5000px 0;
+            
+        }
+
+        .custom-table thead {
+            background-color: #E5E7EB;
+            
+            color: #4B5563;
+            
+        }
+
+        .custom-table th,
+        .custom-table td {
+            padding: 0.5rem 1rem;
+            
+            text-align: left;
+            
+        }
+
+        .custom-table tbody tr {
+            border-top: 1px solid #E5E7EB;
+            
+        }
+
+        table th,
+        td {
+            padding: 5px 30px;
+        }
+
+
+        @keyframes moveHue {
+            100% {
+                background-position: -100% 0;
+            }
+
+            0% {
+                background-position: 100% 0;
+            }
+        }
+
+        .animate-hue {
+            background: linear-gradient(90deg, rgba(173, 216, 230, 0.5), rgba(135, 206, 250, 0.5));
+            background-size: 200% 100%;
+            animation: moveHue 3s linear infinite;
+        }
+
+        a {
+            color: aqua !important;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-900 font-sans">
+    <h1 class="font-semibold text-gray-700" style="padding: 10px;">URL Shortener Service</h1>
+
+    <form id="urlForm">
+        <input style='width:60%;' class="border border-white rounded-lg p-2 w-full bg-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500" type="url" id="targetUrl" placeholder="Enter your URL here" required>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Shorten</button>
+    </form>
+    <div id="result"></div>
+
+    
+    <script>
+        document.getElementById('urlForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const targetUrl = document.getElementById('targetUrl').value;
+
+            const response = await fetch('/api/shorten', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ target_url: targetUrl })
+            });
+
+            const data = await response.json();
+            const resultDiv = document.getElementById('result');
+
+            if (response.ok) {
+                resultDiv.innerHTML = 
+                `<br>URL Shortened Successfully!
+                <br><br>
+                <span style='font-size:150%;'>${new URL(data.short_url).hostname}</span>
+
+                <br><br>
+                <span style='font-size:150%;'><a id='us' href="${data.short_url}" target="_blank">${data.short_url}</a></span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<span style='font-size:130%; cursor: pointer;' class="copy-btn" id="copy-icon" title="Copy URL" onclick="copyUrl()">📋</span>
+                `;
+
+            }
+            
+            else {
+                resultDiv.innerHTML = `<p>Error: ${data}</p>`;
+            }
+        });
+    
+
+
+    function copyUrl() {
+        const url = document.getElementById('us').href;
+        const copyIcon = document.getElementById('copy-icon');
+
+        // Copy the URL to the clipboard
+        navigator.clipboard.writeText(url).then(() => {
+            // Change the icon to a tick
+            copyIcon.textContent = '✔️';
+
+            // Briefly change the icon back to the copy icon after 2 seconds
+            setTimeout(() => {
+                copyIcon.textContent = '📋';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+        });
+    }
+
+    </script>
+</body>
+</html>
