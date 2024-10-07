@@ -1,5 +1,4 @@
 # dependencies
-//package.json
   "dependencies": {
     "axios": "^1.7.7",
     "body-parser": "^1.20.3",
