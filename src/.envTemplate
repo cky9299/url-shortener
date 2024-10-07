@@ -1,0 +1,14 @@
+#mysql credentials
+DB_HOST=
+DB_USER=
+DB_PASS=
+DB_NAME=
+
+#server
+PORT=80
+
+#your ipinfo api token to get ip geolocation (https://ipinfo.io/products/ip-geolocation-api)
+IP_TOKEN=
+
+#password to access usage report (included here for your reference)
+USAGE_RPT_PW='authpw'
